@@ -1,19 +1,17 @@
 "use client"
 
 import React, { useRef, useState } from "react"
-import { motion, useSpring, useTransform } from "motion/react"
+import { HTMLMotionProps, motion, useSpring, useTransform } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-interface TiltProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode
+interface TiltProps extends HTMLMotionProps<"div"> {
   maxRotation?: number
   scale?: number
-  transition?: {
-    type: string
-    stiffness: number
-    damping: number
-    mass: number
+  springOptions?: {
+    stiffness?: number
+    damping?: number
+    mass?: number
   }
 }
 
@@ -21,8 +19,7 @@ export function Tilt({
   children,
   maxRotation = 15,
   scale = 1.05,
-  transition = {
-    type: "spring",
+  springOptions = {
     stiffness: 300,
     damping: 30,
     mass: 1,
@@ -32,8 +29,8 @@ export function Tilt({
 }: TiltProps) {
   const ref = useRef<HTMLDivElement>(null)
 
-  const x = useSpring(0, transition)
-  const y = useSpring(0, transition)
+  const x = useSpring(0, springOptions)
+  const y = useSpring(0, springOptions)
 
   const rotateX = useTransform(y, [-0.5, 0.5], [maxRotation, -maxRotation])
   const rotateY = useTransform(x, [-0.5, 0.5], [-maxRotation, maxRotation])
